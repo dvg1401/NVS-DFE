@@ -1,0 +1,39 @@
+#directory-container {
+    position: relative;
+    top: 3%;
+    left: 1%;
+    width: 25%;
+    height: 90%;
+    background-color: #C4C4C4;
+}
+
+#directories, #directories ul {
+    padding-left: 3%;
+}
+#directories li div {
+    display: inline-block;
+    margin-right: 2%;
+}
+.students {
+    display: none;
+}
+
+.triangle {
+    width: 0; 
+    height: 0; 
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;    
+    border-left: 6px solid #500472;
+}
+.triangle-down{
+    width: 0; 
+    height: 0; 
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;    
+    border-top: 6px solid #500472;
+}
+.square {
+    width: 8px;
+    height: 8px; 
+    background-color: #3A5A69;
+}

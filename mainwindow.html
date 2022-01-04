@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/vue@next"></script>
+        <link rel="stylesheet" href="main.css">
+        <title>NVS Grundschule Waltersdorf</title>
+    </head>
+        <body>
+            <div id="nvs-app">
+                <div class="app-border">
+                    <img id="logo" src="img/Logo_DFE_final.png">
+                    <div class="main-menu-container">
+                        <!-- administrative teacher menu-->
+                        <ul class="main-menu" id="admin-menu">
+                            <li>Profil</li>
+                            <li @click="toggleManageOptions($event)"><div class="triangle-grey"></div> Verwalten
+                            </li>
+                            <li>Abmelden</li>
+                        </ul>
+                    </div>
+                    <div class="main-menu teacher">
+                        <!-- teacher menu-->
+                        <div class="save"></div>
+                        <div id="role"></div>
+                        <div id="signout"></div>
+                    </div>
+                    <div class="main-menu parents">
+                        <!-- parents menu-->
+                        <div class="save"></div>
+                        <div id="signout"></div>
+                    </div>
+                    <div id="separate"></div> 
+                    <!-- managing activities -->
+                    <div v-if="managingSchool" id="manage-container">
+                        <div class="manage"><div class="square"></div> Fächer verwalten</div>
+                        <div class="manage"><div class="square"></div> Lehrer verwalten</div>
+                        <div class="manage"><div class="square"></div> Klassen verwalten</div>
+                    </div>
+                    <div class="main-container">
+                        <div id="directory-container">
+                           <ul id="directories">
+                               <li @click="showSchoolComponents(); turnTriangle($event);"><div class="triangle"></div>Grundschule Waltersdorf</li>
+                               <li v-if="SchoolComponentsVisible"> <!--- SchoolComponents:  subjects, teachers, classes-->
+                                   <ul>
+                                       <li @click="showSubjects();turnTriangle($event);"><div class="triangle"></div>Fächer</li>
+                                        <li v-if="subjectsVisible">
+                                            <ul id="subject-list">
+                                                <li><div class="square"></div>Mathe</li>
+                                                <li><div class="square"></div>Sachkunde</li>
+                                                <li><div class="square"></div>Deutsch</li>
+                                            </ul>
+                                        </li>
+                                   </ul>
+                                   <ul>
+                                        <li @click="showTeachers();turnTriangle($event);"><div class="triangle"></div>Lehrer</li>
+                                        <li v-if="teachersVisible">
+                                            <ul id="teacher-list">
+                                                <li><div class="square"></div>Große, Micha</li>
+                                                <li><div class="square"></div>Siegel, Sylvia</li>
+                                                <li><div class="square"></div>Kulus, Frank</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li @click="showClasses();turnTriangle($event);"><div class="triangle"></div>Klassen</li>
+                                        <li v-if="classesVisible">
+                                            <ul id="schoolclass-list">
+                                                <li @click="showStudentsofClass($event);turnTriangle($event);"><div class="triangle"></div>3b</li>  
+                                                <ul id="3b-student-list" class="students">
+                                                    <li><div class="square"></div>Paul, Jonas</li> 
+                                                </ul>
+                                                <li @click="showStudentsofClass($event);turnTriangle($event);"><div class="triangle"></div>4a</li>
+                                                <ul id="4a-student-list" class="students">
+                                                    <li><div class="square"></div>Domscheit, Nick</li> 
+                                                </ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                               </li>
+                           </ul>
+                        </div>
+                        <div id="nvs-edit-border">
+                            <div class="edit-container">
+                                <div id="teacher-detail">
+                                </div>
+                            </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <script>
+                let NVS = Vue.createApp({
+                    data: function(){
+                        return {
+                        SchoolComponentsVisible: false,
+                        subjectsVisible: false,
+                        teachersVisible: false,
+                        classesVisible: false,
+                        managingSchool: false
+                        }
+                    },
+                    methods:{
+                        showSchoolComponents() {
+                            this.SchoolComponentsVisible = !this.SchoolComponentsVisible
+                            if (this.subjectsVisible)
+                                this.subjectsVisible = !this.subjectsVisible
+                            if (this.teachersVisible)
+                                this.teachersVisible = !this.teachersVisible
+                            if (this.classesVisible)
+                                this.classesVisible = !this.classesVisible
+                        },
+                        showSubjects() {
+                            this.subjectsVisible = !this.subjectsVisible
+                        },
+                        showTeachers() {
+                            this.teachersVisible = !this.teachersVisible
+                        },
+                        showClasses() {
+                            this.classesVisible = !this.classesVisible
+                        },
+                        showStudentsofClass(e){
+                            // Try & Catch if there is no sibling
+                             if (!e.target.classList.contains('triangle') && !e.target.classList.contains('triangle-down'))
+                             {
+                                if (e.target.nextSibling.style.display == "block")
+                                    e.target.nextSibling.style.display = "none"
+                                else
+                                    e.target.nextSibling.style.display = "block"
+                             }
+                             else 
+                             {
+                                 if (e.target.parentElement.nextSibling.style.display == "block")
+                                    e.target.parentElement.nextSibling.style.display = "none"
+                                else 
+                                    e.target.parentElement.nextSibling.style.display = "block"
+                             }
+                        },
+                        turnTriangle(e) {
+                            if (e.target.tagName == 'LI')
+                                var element = e.target.firstChild
+                            else
+                                var element = e.target
+                            if (element.classList.contains('triangle')) 
+                            {
+                                element.classList.remove('triangle') 
+                                element.classList.add('triangle-down')
+                            }
+                            else if (element.classList.contains('triangle-down'))
+                            {
+                                element.classList.remove('triangle-down') 
+                                element.classList.add('triangle')
+                            }
+                        },
+                        toggleManageOptions(e) {
+                            this.managingSchool = !this.managingSchool
+                            if (e.target.tagName == 'LI')
+                                var element = e.target.firstChild
+                            else
+                                var element = e.target
+                            if (element.classList.contains('triangle-grey')) 
+                            {
+                                element.classList.remove('triangle-grey') 
+                                element.classList.add('triangle-grey-down')
+                            }
+                            else if (element.classList.contains('triangle-grey-down'))
+                            {
+                                element.classList.remove('triangle-grey-down') 
+                                element.classList.add('triangle-grey')
+                            }
+                        },
+                    }
+                })
+                NVS.mount('#nvs-app')
+            </script>
+        </body>
+    
+</html>
